@@ -1,10 +1,14 @@
-from flask import Flask
+from fastapi import FastAPI
+from pydantic import BaseModel
 
-app = Flask(__name__)
+app = FastAPI()
 
-@app.route('/')
-def hello_world():
-    return "Hello World!"
+class Item(BaseModel):
+    name: str
+    description: str = None
+    price: int
+    tax: int = None
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+@app.post('/items')
+def add_item(item: Item):
+    return {"item": item}
